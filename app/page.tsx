@@ -1,20 +1,20 @@
 "use client";
 import { useDebouncedCallback } from "use-debounce";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function Home() {
-  const [input, setinput] = useState<string>("");
+  const [input, setInput] = useState<string>("");
 
-  const handleInputChange = useDebouncedCallback((term) => {
-    setinput(term);
-    runPrediction(input);
-    return () => setinput("");
+  const handleInputChange = useDebouncedCallback(async (value) => {
+    setInput(value);
+    if (value.trim() !== "") {
+      await runPrediction(value);
+    }
   }, 1000);
 
   async function runPrediction(input: string) {
     const result = await axios.post("api/emotion", { input });
-    console.log(result);
   }
 
   return (
